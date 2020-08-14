@@ -18,15 +18,15 @@ export default () => {
       .then((data) => {
         setItem(data);
       });
-  }, [ productId ]);
+  }, [productId]);
 
-  console.log(item, productId)
+  console.log(item, productId);
 
   return (
     <>
       {item && (
         <GridWrapper>
-          <Image src={ item.imageSrc } alt={ item.name } />
+          <Image src={item.imageSrc} alt={item.name} />
 
           <NameReviewDiv>
             <NameReviewContent>
@@ -96,7 +96,7 @@ export default () => {
       )}
     </>
   );
-}
+};
 
 const ProductName = styled.p`
   padding: 5px 10px;
@@ -135,7 +135,8 @@ const Image = styled.img`
   width: 310px;
   grid-row-start: row1;
 
-  @media (min-width: 768px) {}
+  @media (min-width: 768px) {
+  }
 `;
 
 const NameReviewDiv = styled.div`
