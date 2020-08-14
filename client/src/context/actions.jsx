@@ -9,6 +9,7 @@ export const ACTIONS = {
   SET_STATUS: "set-status",
   ADD_ITEM_TO_CART: "add-item-to-cart",
   REMOVE_ITEM_FROM_CART: "remove-item-from-cart",
+  SET_CATEGORY: "set-category",
 };
 
 // DISPATCH ACTIONS
@@ -37,5 +38,12 @@ export const removeItem = (itemId) => {
   return {
     type: ACTIONS.REMOVE_ITEM_FROM_CART,
     payload: { itemId },
+  };
+};
+
+export const setCategory = (selectedCategory) => {
+  return {
+    type: ACTIONS.SET_CATEGORY,
+    payload: { category: selectedCategory },
   };
 };

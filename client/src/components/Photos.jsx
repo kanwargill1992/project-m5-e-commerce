@@ -7,7 +7,6 @@ export default ({ id, size, title, imageSrc }) => {
       <ImageWrapper src={imageSrc} />
       <Content>
         <Title>{title}</Title>
-        <SubTitle>SHOP NOW</SubTitle>
       </Content>
     </Wrapper>
   );
@@ -15,7 +14,6 @@ export default ({ id, size, title, imageSrc }) => {
 
 const Wrapper = styled.div`
   min-width: 10%;
-  /* max-width: 20%; */
   height: 30rem;
   flex: 1 1 auto;
   display: flex;
@@ -33,8 +31,7 @@ const Wrapper = styled.div`
 const ImageWrapper = styled.img`
   height: 100%;
   width: 100%;
-  background-position: center;
-  background-size: cover;
+  object-fit: cover;
   &:hover {
     transform: scale(1.1);
     transition: transform 2s cubic-bezier(0.25, 0.45, 0.45, 0.95);
@@ -62,10 +59,4 @@ const Title = styled.h1`
   margin-bottom: 6px;
   font-size: 22px;
   color: #4a4a4a;
-`;
-
-const SubTitle = styled.div`
-  font-weight: lighter;
-  border: none;
-  font-size: 16px;
 `;

@@ -12,6 +12,8 @@ import Shop from "./Shop";
 import Cart from "./Cart";
 import ProductDetails from "./ProductDetails";
 
+import Firestore from './Firestore'
+
 // Render the content area based on status and path
 export default () => {
   const {
@@ -33,6 +35,10 @@ export default () => {
           </Route>
           <Route path="/cart">
             <Cart />
+          </Route>
+
+          <Route path="/firebase">
+            <Firestore />
           </Route>
 
           <Route path="/products/:productId">

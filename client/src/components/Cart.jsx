@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FaOpencart } from "react-icons/fa";
 
 import { useShopContext } from "../context/ShopContext";
-import { removeItem, STATUS } from "../context/actions";
+import { STATUS } from "../context/actions";
 
 export default ({ item }) => {
   // const { id } = item;
@@ -15,6 +15,7 @@ export default ({ item }) => {
   const {
     state: { status, cart },
   } = useShopContext();
+  console.log("cart", cart);
 
   const cartReducer = (total, item) => {
     const itemPrice = Number(item.price.slice(1));
@@ -197,10 +198,6 @@ const ItemQuant = styled.span`
 `;
 
 const ItemPrice = styled.span`
-  margin: 1.5rem;
-`;
-
-const ItemTotal = styled.span`
   margin: 1.5rem;
 `;
 

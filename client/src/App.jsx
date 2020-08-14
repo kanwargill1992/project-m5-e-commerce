@@ -7,8 +7,6 @@ import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
 
-// A SPA (Single Page App) will always have header and footer,
-// with only the content displayed based on current route.
 export default () => {
   return (
     <Router>

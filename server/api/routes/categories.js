@@ -5,13 +5,13 @@ const database = firebase.database();
 
 router.get('/', (req, res) => {
   database
-    .ref('companies')
+    .ref('categories')
     .once('value')
-    .then(companiesSnapshot => companiesSnapshot.val() || null)
-    .then(companies => {
-      console.log('Retrieved all companies.')
-      res.status(200).json(companies);
-    })
+    .then(categoriesSnapshot => categoriesSnapshot.val() || null)
+    .then(categories => {
+      console.log('Retrieved all categories.');
+      res.status(200).json(categories);
+    });
 });
 
 module.exports = router;

@@ -9,6 +9,9 @@ const initialState = {
   status: STATUS.LOADING,
   items: null,
   companies: null,
+  categories: null,
+  category: "All",
+  itemIds: [],
   cart: [],
 };
 
@@ -19,30 +22,42 @@ export const useShopContext = () => useContext(ShopContext);
 export const ShopProvider = ({ children }) => {
   const [state, dispatch] = useReducer(shopReducer, initialState);
 
-  const fetchData = async () => {
-    try {
-      // Fetch the list of items from the API
-      let res = await fetch(`/products`);
-      const items = await res.json();
-      // Fetch the list of companies from the API
-      res = await fetch(`/companies`);
-      const companies = await res.json();
-      // Create a new state
-      const newState = {
-        status: STATUS.IDLE,
-        items,
-        companies
-      };
-      // Pass the new state to the dispatch
-      dispatch(setState(newState));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data from Firebase database through Node
+        let res = await fetch(`/products`);
+        const items = await res.json();
+
+        res = await fetch(`/companies`);
+        const companies = await res.json();
+
+        res = await fetch(`/categories`);
+        const categoriesObj = await res.json();
+        const categories = Object.keys(categoriesObj);
+
+        const itemIds = Object.keys(items);
+
+        // Create a new state
+        const newState = {
+          status: STATUS.IDLE,
+          items,
+          companies,
+          categories,
+          itemIds,
+        };
+
+        // Pass the new state to the dispatch
+        dispatch(setState(newState));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
+
+  console.count("ShopContext");
+  console.log(state);
 
   return (
     <ShopContext.Provider value={{ state, dispatch }}>
