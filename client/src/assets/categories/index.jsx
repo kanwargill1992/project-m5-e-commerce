@@ -1,11 +1,12 @@
 import fitness from "./fitness.jpg";
 import entertainment from "./entertainment.jpg";
 import gaming from "./gaming.jpg";
-import health from "./health.jpg";
-import industrial from "./industrial.jpg";
+import health from "./medical.jpg";
+
 import pets from "./pets.jpg";
 import lifestyle from "./lifestyle.jpg";
 import main from "./maincategory.jpg";
+import industrial from "./industrailtorch.jpg";
 
 const categories = [
   {
