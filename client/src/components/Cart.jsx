@@ -15,13 +15,12 @@ export default ({ item }) => {
   const {
     state: { status, cart },
   } = useShopContext();
-  console.log("cart", cart);
 
   const cartReducer = (total, item) => {
     const itemPrice = Number(item.price.slice(1));
     return total + itemPrice;
   };
-  const cartTotal = cart.reduce(cartReducer, 0);
+  const cartTotal = cart.reduce(cartReducer, 0).toFixed(2);
 
   return (
     <>
