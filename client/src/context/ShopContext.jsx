@@ -39,10 +39,11 @@ export const ShopProvider = ({ children }) => {
         // Assign a state listenner for firebase user
         firebase.auth().onAuthStateChanged(firebaseUser => {
           if (firebaseUser) {
-            console.log(firebaseUser);
+            console.log('CURRENT USER', firebaseUser);
             dispatch(setCurrentUser(firebaseUser));
           } else {
-            console.log('Not logged in.')
+            console.log('NO CURRENT USER')
+            dispatch(setCurrentUser(null))
           }
         });
 
@@ -56,10 +57,10 @@ export const ShopProvider = ({ children }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [state.currentUser]);
 
   console.count("ShopContext");
-  console.log(state);
+  console.log('STATE', state);
 
   return (
     <ShopContext.Provider value={{ state, dispatch }}>
