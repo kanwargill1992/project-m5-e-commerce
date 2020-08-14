@@ -1,70 +1,44 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
 
 import { addItemToCart } from "../context/actions";
 import { useShopContext } from "../context/ShopContext";
 
-// Image ContainerComponent
-export const ImageContent = ({ src, alt }) => {
-  return (
-    <ImageContainer>
-      <Image src={src} alt={alt} />
-    </ImageContainer>
-  );
-};
-
-export const ProductName = ({ children }) => {
-  return <Name>{children}</Name>;
-};
-export const ProductPrice = ({ children }) => {
-  return <Price>{children}</Price>;
-};
-export const ProductAvailability = ({ children, available }) => {
-  return <Availability available={available}>{children}</Availability>;
-};
-export const ProductMoreInfo = ({ children }) => {
-  return <MoreInfo>{children}</MoreInfo>;
-};
-export const ProductAddToCart = ({ children, handleAddToCart }) => {
-  return <AddToCart onClick={handleAddToCart}>{children}</AddToCart>;
-};
-
-export const checkAvailability = (stockQty) => {
-  const available = stockQty > 0;
+export const checkAvailability = (numInStock) => {
+  const available = numInStock > 0;
   const availability = available ? "In stock" : "Out of stock";
   return { available, availability };
 };
 
-/*
-The Product component is taking props from the map in the product list component. The
-checkInStock function explaind in the comment above is used below.
-*/
 export default ({ item }) => {
   const { dispatch } = useShopContext();
-
   const { id, imageSrc, name, price, numInStock } = item;
-
   const { available, availability } = checkAvailability(numInStock);
-
   const handleAddToCart = () => dispatch(addItemToCart(id));
 
   return (
     <Card>
-      <ImageContent src={imageSrc} alt={name} />
-      <Divider />
+      <ImageContainer>
+        <Image src={imageSrc} alt={name} />
+      </ImageContainer>
+
       <InfoWrapper>
-        <ProductName>{name}</ProductName>
+        <Name>{name}</Name>
+
         <PriceAvailability>
-          <ProductPrice>{price}</ProductPrice>
-          <ProductAvailability available={available}>
-            {availability}
-          </ProductAvailability>
+          <Price>{price}</Price>
+          <Availability available={available}>{availability}</Availability>
         </PriceAvailability>
+
         <ActionWrapper>
-          <ProductMoreInfo>More info</ProductMoreInfo>
-          <ProductAddToCart handleAddToCart={handleAddToCart}>
+          <Link to={`/products/${id}`}>
+            <MoreInfo>More info</MoreInfo>
+          </Link>
+
+          <AddToCart onClick={handleAddToCart} disabled={!available}>
             Add to Cart
-          </ProductAddToCart>
+          </AddToCart>
         </ActionWrapper>
       </InfoWrapper>
     </Card>
@@ -106,11 +80,6 @@ const Image = styled.img`
   max-width: 100%;
 `;
 
-const Divider = styled.div`
-  border-bottom: 1px solid lightgrey;
-  width: 90%;
-`;
-
 const InfoWrapper = styled.div`
   width: 90%;
   height: 55%;
@@ -133,11 +102,13 @@ const Name = styled.p`
   font-size: 16px;
   font-weight: 600;
 `;
+
 const Price = styled.p`
   padding: 5px;
   font-weight: bold;
   font-size: 20px;
 `;
+
 const Availability = styled.p`
   padding: 5px;
   font-size: 20px;
@@ -158,4 +129,14 @@ const AddToCart = styled(MoreInfo)`
   &:hover {
     background: green;
   }
+
+  ${(p) =>
+    p.disabled &&
+    css`
+      &:hover {
+        background: none;
+        cursor: not-allowed;
+        color: #ccc;
+      }
+    `}
 `;

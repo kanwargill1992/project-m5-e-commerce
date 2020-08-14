@@ -25,7 +25,12 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 15px;
   height: 100%;
+
+  @media (min-width: 1200px) {
+    padding: 0 10%;
+  }
 `;
 
 const IconWrapper = styled.div`

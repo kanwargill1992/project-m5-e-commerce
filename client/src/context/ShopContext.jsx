@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 
-import { STATUS, setState } from "./actions";
+import { STATUS, setState, setCurrentUser } from "./actions";
 import { shopReducer } from "./reducers";
+import firebase from '../firebase/firebase'
 
-// Create the shop context and initial state
+// Create the shop context
 const ShopContext = createContext();
+
+// Create the initial state
 const initialState = {
   status: STATUS.LOADING,
   items: null,
@@ -13,6 +16,7 @@ const initialState = {
   category: "All",
   itemIds: [],
   cart: [],
+  currentUser: null,
 };
 
 // Custom hook for providing the ShopContext
@@ -26,26 +30,24 @@ export const ShopProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         // Fetch data from Firebase database through Node
-        let res = await fetch(`/products`);
-        const items = await res.json();
+        const items         = await (await fetch(`/products`)).json();
+        const companies     = await (await fetch(`/companies`)).json();
+        const categoriesObj = await (await fetch(`/categories`)).json();
+        const categories    = Object.keys(categoriesObj);
+        const itemIds       = Object.keys(items);
 
-        res = await fetch(`/companies`);
-        const companies = await res.json();
-
-        res = await fetch(`/categories`);
-        const categoriesObj = await res.json();
-        const categories = Object.keys(categoriesObj);
-
-        const itemIds = Object.keys(items);
+        // Assign a state listenner for firebase user
+        firebase.auth().onAuthStateChanged(firebaseUser => {
+          if (firebaseUser) {
+            console.log(firebaseUser);
+            dispatch(setCurrentUser(firebaseUser));
+          } else {
+            console.log('Not logged in.')
+          }
+        });
 
         // Create a new state
-        const newState = {
-          status: STATUS.IDLE,
-          items,
-          companies,
-          categories,
-          itemIds,
-        };
+        const newState = { status: STATUS.IDLE, items, companies, categories, itemIds };
 
         // Pass the new state to the dispatch
         dispatch(setState(newState));

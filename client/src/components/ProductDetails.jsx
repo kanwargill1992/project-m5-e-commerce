@@ -3,20 +3,12 @@ import { useParams } from "react-router-dom";
 import { Icon } from "react-icons-kit";
 import { starFull } from "react-icons-kit/icomoon/starFull";
 import { starHalf } from "react-icons-kit/icomoon/starHalf";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import ComparePrice from "./ComparePrice";
-import {
-  ProductName,
-  ProductAvailability,
-  ProductAddToCart,
-  checkAvailability,
-  // ImageContent,
-  // ProductPrice,
-  // ProductMoreInfo,
-} from "./Product";
+import { checkAvailability } from "./Product";
 
-export default function ProductDetails() {
+export default () => {
   const [item, setItem] = useState(null);
   const { productId } = useParams();
 
@@ -24,19 +16,18 @@ export default function ProductDetails() {
     fetch(`/products/${productId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
         setItem(data);
       });
-  }, [productId]);
+  }, [ productId ]);
 
-  console.log("item", item);
+  console.log(item, productId)
 
   return (
     <>
       {item && (
         <GridWrapper>
-          <Image src={item.imageSrc} alt={item.name} />
-          {/* <> */}
+          <Image src={ item.imageSrc } alt={ item.name } />
+
           <NameReviewDiv>
             <NameReviewContent>
               <ProductName>{item.name}</ProductName>
@@ -53,21 +44,23 @@ export default function ProductDetails() {
             </NameReviewContent>
             <NameReviewBottomFiller />
           </NameReviewDiv>
-          {/* </> */}
+
           <ColoursSizes>
             <Sizes disabled={true}>Small</Sizes>
             <Sizes disabled={true}>Medium</Sizes>
             <Sizes>Large</Sizes>
           </ColoursSizes>
+
           <AddToCart>
             <>{ComparePrice("ARK", item.price, 1)}</>
-            <ProductAddToCart>Add to Cart</ProductAddToCart>
-            <ProductAvailability
+            <AddToCartBtn>Add to Cart</AddToCartBtn>
+            <Availability
               available={checkAvailability(item.numInStock).available}
             >
               {checkAvailability(item.numInStock).availability}
-            </ProductAvailability>
+            </Availability>
           </AddToCart>
+
           <PriceComparison>
             <PriceComparisonContent>
               {ComparePrice("ARK", item.price, 1)}
@@ -105,25 +98,53 @@ export default function ProductDetails() {
   );
 }
 
+const ProductName = styled.p`
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const Availability = styled.p`
+  padding: 5px;
+  font-size: 20px;
+  color: ${(p) => (p.available ? "green" : "gray")};
+`;
+
+const AddToCartBtn = styled.button`
+  width: 120px;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background: green;
+  }
+
+  ${(p) =>
+    p.disabled &&
+    css`
+      &:hover {
+        background: none;
+        cursor: not-allowed;
+        color: #ccc;
+      }
+    `}
+`;
+
 const Image = styled.img`
   grid-row-start: row1-start;
   width: 310px;
   grid-row-start: row1;
-  @media (min-width: 768px) {
-  }
+
+  @media (min-width: 768px) {}
 `;
 
 const NameReviewDiv = styled.div`
-  /* border: solid red 2px; */
-  /* border-bottom: 1px solid lightgrey; */
-
   -webkit-box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   -moz-box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   border-radius: 8px;
   margin: 0px 0px 20px 0px;
   width: 90%;
-
   grid-row-start: row1-end;
   grid-row-end: second-line;
 
@@ -131,7 +152,6 @@ const NameReviewDiv = styled.div`
     grid-column-start: 2;
     grid-row-start: row1;
     grid-row-end: row1-end;
-
     margin: 10px;
   }
 `;
@@ -159,19 +179,15 @@ const NameReviewBottomFiller = styled.div`
   border-radius: 0px 0px 8px 8px;
   width: 100%;
   height: 23%;
-  /* bottom: 0; */
   background-color: #dee0df;
 `;
 
 const ColoursSizes = styled.div`
   grid-row-start: second-line;
   grid-row-end: third-line;
-  /* border-bottom: 1px solid lightgrey; */
-  /* border: solid blue 2px; */
-
   width: 90%;
   display: grid;
-  /* grid: auto / 1fr; */
+
   @media (min-width: 768px) {
     grid-column-start: 2;
     grid-row-start: row1-end;
@@ -180,9 +196,13 @@ const ColoursSizes = styled.div`
 `;
 
 const Sizes = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 30%;
   margin: 0px;
   padding: 20px;
+
   ${(props) =>
     props.disabled
       ? `
@@ -198,16 +218,13 @@ const Sizes = styled.button`
 const AddToCart = styled.div`
   grid-row-start: third-line;
   grid-row-end: fourth-line;
-
-  border-top: 1px solid lightgrey;
-  /* border: solid yellow 2px; */
-
   padding: 5px;
   width: 90%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
   @media (min-width: 768px) {
     grid-column-start: 2;
     grid-row-start: second-line;
@@ -216,18 +233,13 @@ const AddToCart = styled.div`
 `;
 
 const PriceComparison = styled.div`
-  /* border: solid purple 2px; */
-
   grid-row-start: fourth-line;
   grid-row-end: fifth-line;
-
   -webkit-box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   -moz-box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   box-shadow: 0px 13px 23px -5px rgba(161, 161, 161, 1);
   border-radius: 8px;
-
   width: 90%;
-  /* height: 30vh; */
 
   @media (min-width: 768px) {
     grid-column-start: 2;
@@ -249,26 +261,22 @@ const PriceComparisonFiller = styled.div`
   border-radius: 0px 0px 8px 8px;
   width: 100%;
   height: 28%;
-  /* bottom: 0; */
   background-color: #dee0df;
 `;
 
 const LoremDiv = styled.div`
-  /* border: solid red 2px; */
-
   grid-row-start: fifth-line;
   grid-row-end: last-line;
-
   padding: 10px;
 
   h1 {
     padding: 5px 0px 5px;
   }
+
   @media (min-width: 768px) {
     grid-column-start: 1;
     grid-row-start: third-line;
     grid-row-end: last-line;
-
     border-top: 1px solid lightgrey;
   }
 `;
@@ -278,32 +286,13 @@ const GridWrapper = styled.div`
   grid: auto / 1fr;
   grid-template-columns: 1fr;
   grid-template-rows: [row1-start] 450px [row1-end] 100px [second-line] 200px [third-line] 100px [fourth-line] 100px [fifth-line] auto [last-line];
-
   gap: 20px 50px;
   padding: 30px;
   margin: 30px;
-  /* border: solid blue 2px; */
   justify-items: center;
+
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: [row1-start] 130px [row1-end] 200px [second-line] 100px [third-line] 150px [fourth-line]auto [last-line];
   }
 `;
-
-// const Card = styled.div`
-// width: 100%;
-// height: 100%;
-//   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-//   transition: 0.3s;
-// `;
-
-/*
-@media (min-width: 768px) {
-  }
-  @media (min-width: 1200px) {
-  }
-  @media (min-width: 1600px) {
-  }
-  @media (min-width: 1920px) {
-  }
-*/

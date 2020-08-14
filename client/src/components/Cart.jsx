@@ -4,24 +4,24 @@ import { Link } from "react-router-dom";
 import { FaOpencart } from "react-icons/fa";
 
 import { useShopContext } from "../context/ShopContext";
-import { STATUS } from "../context/actions";
+import { STATUS, removeItemFromCart } from "../context/actions";
 
-export default ({ item }) => {
-  // const { id } = item;
-  // const { dispatch } = useShopContext();
+export default () => {
+  const { state, dispatch } = useShopContext();
+  const { status, cart } = state;
 
-  // const handleRemoveFromCart = () => dispatch(removeItem(id));
-
-  const {
-    state: { status, cart },
-  } = useShopContext();
   console.log("cart", cart);
 
-  const cartReducer = (total, item) => {
-    const itemPrice = Number(item.price.slice(1));
-    return total + itemPrice;
-  };
+  // expecting input "$24.99"
+  const priceStrToNumber = (priceStr) => Number(priceStr.slice(1));
+
+  // Sum up the cart total
+  const cartReducer = (total, item) => total + priceStrToNumber(item.price);
   const cartTotal = cart.reduce(cartReducer, 0).toFixed(2);
+
+  // Dispatch action to remove item from state.cart
+  const handleRemoveItem = (productId) =>
+    dispatch(removeItemFromCart(productId));
 
   return (
     <>
@@ -34,7 +34,7 @@ export default ({ item }) => {
               <Quantity>
                 <Head>QUANTITY</Head>
                 <Head>PRICE</Head>
-                {/* <Head>TOTAL</Head> */}
+                <Head>TOTAL</Head>
               </Quantity>
             </ProductDetails>
 
@@ -59,9 +59,14 @@ export default ({ item }) => {
                             <option>4</option>
                             <option>5</option>
                           </select>
-                          <Btn>Remove</Btn>
+                          <Btn onClick={() => handleRemoveItem(item.id)}>
+                            Remove
+                          </Btn>
                         </ItemQuant>
                         <ItemPrice>{item.price}</ItemPrice>
+                        <ItemTotal>
+                          ${priceStrToNumber(item.price) * 2}
+                        </ItemTotal>
                       </Quantity>
                     </ItemWrapper>
                   </ItemLi>
@@ -69,11 +74,9 @@ export default ({ item }) => {
               })}
             </ItemList>
 
-            <Btn>
-              <Link to="/products" style={{ color: "black" }}>
-                Continue Shopping
-              </Link>
-            </Btn>
+            <Link to="/products" style={{ color: "black" }}>
+              <Btn>Continue Shopping</Btn>
+            </Link>
           </Wrapper>
           <Card>
             <CardHeading>Order Summary</CardHeading>
@@ -125,6 +128,8 @@ const Empty = styled.a`
 const MainWrapper = styled.div`
   display: grid;
   grid-template-areas: "content content card";
+  margin: 10rem 10vw;
+
   @media (max-width: 1100px) {
     grid-template-areas:
       "content"
@@ -134,9 +139,14 @@ const MainWrapper = styled.div`
 
 const Wrapper = styled.div`
   grid-area: content;
-  margin: 10rem auto;
+  margin-right: 5rem;
   width: auto;
   border-radius: 0.5rem;
+
+  @media (max-width: 1100px) {
+    margin-right: 0;
+    margin-bottom: 5rem;
+  }
 `;
 
 const ItemWrapper = styled.div`
@@ -201,6 +211,10 @@ const ItemPrice = styled.span`
   margin: 1.5rem;
 `;
 
+const ItemTotal = styled.span`
+  margin: 1.5rem;
+`;
+
 const ProductList = styled.div`
   display: grid;
   grid-auto-columns: 10rem;
@@ -221,24 +235,27 @@ const Btn = styled.button`
 `;
 
 const Card = styled.div`
-  position: sticky;
-  top: 17rem;
   grid-area: card;
-  height: 25rem;
-  margin: 10rem auto;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  position: sticky;
+  top: 17rem;
+  height: 25rem;
   width: 20rem;
   padding: 1rem;
   background-color: #d1d9e0;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
+
   @media (max-width: 1100px) {
+    position: relative;
+    top: 0;
     height: 15rem;
-    margin-top: -3rem;
+    margin: 0 auto;
   }
 `;
 

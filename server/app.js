@@ -1,10 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
-
-const PORT = 4000;
 
 // Prepended routes
 const productRoutes = require("./api/routes/products");
@@ -37,4 +36,4 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Listenning on port ${PORT}`));
+app.listen(process.env.PORT, () => console.log(`Listenning on port ${process.env.PORT}`));

@@ -13,9 +13,8 @@ export default () => {
 
 const Wrapper = styled.div`
   position: relative;
-  top: -7vh;
   width: 100%;
-  height: 100%;
+  height: 93vh;
 `;
 
 const Image = styled.img`

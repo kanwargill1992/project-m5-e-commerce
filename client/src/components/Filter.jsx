@@ -12,7 +12,7 @@ export default function Filter() {
 
   return (
     <Wrapper>
-      <label htmlFor="categories">Select a category</label>
+      <Label htmlFor="categories">Select a category</Label>
       <CategoryFilter
         onChange={(e) => dispatch(setCategory(e.target.value))}
         name="categories"
@@ -30,13 +30,17 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* border-top: 1px solid #dee0df; */
-  /* padding-top: 10px; */
+  justify-content: center;
+  align-items: center;
 `;
+
+const Label = styled.label`
+  font-size: 20px;
+`
 
 const CategoryFilter = styled.select`
   grid-column-start: 1;
-  width: 180px;
+  width: 200px;
   height: 35px;
   margin-top: 10px;
   background-color: #dee0df;
