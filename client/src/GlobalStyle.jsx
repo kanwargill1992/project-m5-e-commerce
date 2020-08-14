@@ -4,12 +4,16 @@ const GlobalStyle = createGlobalStyle`
   * {
     padding: 0;
     margin: 0;
-    font-family: Helvetica, Sans-Serif;
+    font-family: 'Quattrocento Sans', sans-serif;
     box-sizing: border-box;
   }
 
-  h1, h2, h3 {
-    font-family: 'Times New Roman', Times, serif;
+  h1 {
+    font-family: 'Quattrocento', serif;
+  }
+  
+  h2, h3 {
+    font-family: font-family: 'Quattrocento Sans', sans-serif;
   }
 
   a {

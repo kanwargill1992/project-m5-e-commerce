@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 
-import { STATUS, setState, setCurrentUser } from "./actions";
+import { STATUS, setState, setCurrentUser, setSignedIn } from "./actions";
 import { shopReducer } from "./reducers";
-import firebase from '../firebase/firebase'
+import firebase from "../firebase/firebase";
 
 // Create the shop context
 const ShopContext = createContext();
@@ -17,6 +17,7 @@ const initialState = {
   itemIds: [],
   cart: [],
   currentUser: null,
+  signedIn: false,
 };
 
 // Custom hook for providing the ShopContext
@@ -30,25 +31,33 @@ export const ShopProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         // Fetch data from Firebase database through Node
-        const items         = await (await fetch(`/products`)).json();
-        const companies     = await (await fetch(`/companies`)).json();
+        const items = await (await fetch(`/products`)).json();
+        const companies = await (await fetch(`/companies`)).json();
         const categoriesObj = await (await fetch(`/categories`)).json();
-        const categories    = Object.keys(categoriesObj);
-        const itemIds       = Object.keys(items);
+        const categories = Object.keys(categoriesObj);
+        const itemIds = Object.keys(items);
 
         // Assign a state listenner for firebase user
-        firebase.auth().onAuthStateChanged(firebaseUser => {
+        firebase.auth().onAuthStateChanged((firebaseUser) => {
           if (firebaseUser) {
-            console.log('CURRENT USER', firebaseUser);
+            console.log("CURRENT USER", firebaseUser);
             dispatch(setCurrentUser(firebaseUser));
+            dispatch(setSignedIn(true));
           } else {
-            console.log('NO CURRENT USER')
-            dispatch(setCurrentUser(null))
+            console.log("NO CURRENT USER");
+            dispatch(setCurrentUser(null));
+            dispatch(setSignedIn(false));
           }
         });
 
         // Create a new state
-        const newState = { status: STATUS.IDLE, items, companies, categories, itemIds };
+        const newState = {
+          status: STATUS.IDLE,
+          items,
+          companies,
+          categories,
+          itemIds,
+        };
 
         // Pass the new state to the dispatch
         dispatch(setState(newState));
@@ -60,7 +69,7 @@ export const ShopProvider = ({ children }) => {
   }, [state.currentUser]);
 
   console.count("ShopContext");
-  console.log('STATE', state);
+  console.log("STATE", state);
 
   return (
     <ShopContext.Provider value={{ state, dispatch }}>

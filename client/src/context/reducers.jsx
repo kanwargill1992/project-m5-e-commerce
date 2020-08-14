@@ -26,6 +26,9 @@ export const shopReducer = (state, action) => {
     case ACTIONS.SET_CURRENT_USER:
       return { ...state, currentUser: payload.currentUser };
 
+    case ACTIONS.SET_SIGNED_IN:
+      return { ...state, signedIn: payload.signedIn };
+
     case ACTIONS.ADD_ITEM_TO_CART: {
       const itemId = payload.itemId;
       const item = items[itemId];

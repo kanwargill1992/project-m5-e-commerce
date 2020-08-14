@@ -8,7 +8,7 @@ import { auth } from "firebase";
 
 export default () => {
   const { state } = useShopContext();
-  const { cart, currentUser } = state;
+  const { cart, currentUser, signedIn } = state;
   const [active, setActive] = useState(false);
   const toggleMenu = () => setActive(!active);
   const dropdownRef = useRef(null);
@@ -27,8 +27,8 @@ export default () => {
           Cart
           <CartItemCount>({cart.length})</CartItemCount>
         </DropdownLink>
-        {currentUser ? (
-          <DropdownLink to="/" onClick={() => auth.signOut()}>
+        {currentUser && signedIn ? (
+          <DropdownLink to="/" onClick={() => auth().signOut()}>
             Sign out
           </DropdownLink>
         ) : (

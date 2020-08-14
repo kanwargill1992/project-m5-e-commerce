@@ -19,7 +19,9 @@ export default function Filter() {
         id="categories"
       >
         {categories.map((category) => (
-          <option key={category} value={category}>{category}</option>
+          <option key={category} value={category}>
+            {category}
+          </option>
         ))}
       </CategoryFilter>
     </Wrapper>
@@ -36,7 +38,7 @@ const Wrapper = styled.div`
 
 const Label = styled.label`
   font-size: 20px;
-`
+`;
 
 const CategoryFilter = styled.select`
   grid-column-start: 1;

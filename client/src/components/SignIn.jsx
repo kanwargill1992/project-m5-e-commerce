@@ -6,19 +6,17 @@ import { useShopContext } from "../context/ShopContext";
 
 export default () => {
   const { state } = useShopContext();
-  const { currentUser } = state;
+  const { currentUser, signedIn } = state;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
-  const [signedIn, setSignedIn] = useState(false);
 
   const handleSignin = () => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
-        setFeedbackMsg("Signed in successfully.");
-        setSignedIn(true);
+        setFeedbackMsg("Signed in successfully. Enjoy the shopping spree!");
         console.log("SIGNED IN USER", user);
         // history.push("/") w/ delay
       })
@@ -30,7 +28,7 @@ export default () => {
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         setFeedbackMsg(
-          "Your account has been created. Click on the Log in to proceed."
+          "Your account has been created and are currently logged in. Enjoy the shopping spree!"
         );
         console.log("SIGNED UP USER", user);
         // history.push("/") w/ delay
@@ -40,7 +38,6 @@ export default () => {
 
   const handleSignout = () => {
     auth().signOut();
-    setSignedIn(false);
     setFeedbackMsg("You are now signed out.");
     // history.push("/") w/ delay
   };
@@ -66,8 +63,20 @@ export default () => {
         placeholder="Password"
       />
       <BtnWrapper>
-        <LoginBtn onClick={handleSignin}>Log in</LoginBtn>
-        <SignUpBtn onClick={handleSignUp}>Sign Up</SignUpBtn>
+        <LoginBtn
+          onClick={handleSignin}
+          currentUser={currentUser}
+          signedIn={signedIn}
+        >
+          Log in
+        </LoginBtn>
+        <SignUpBtn
+          onClick={handleSignUp}
+          currentUser={currentUser}
+          signedIn={signedIn}
+        >
+          Sign Up
+        </SignUpBtn>
         <SignoutBtn
           onClick={handleSignout}
           currentUser={currentUser}
@@ -113,6 +122,7 @@ const BtnWrapper = styled.div`
 `;
 
 const LoginBtn = styled.button`
+  display: ${(p) => (p.currentUser && p.signedIn && "none")};
   border: 1px solid #ccc;
   background: none;
   padding: 12px 10px;
@@ -129,5 +139,5 @@ const LoginBtn = styled.button`
 const SignUpBtn = styled(LoginBtn)``;
 
 const SignoutBtn = styled(LoginBtn)`
-  display: ${(p) => (p.currentUser !== null && p.signedIn ? "flex" : "none")};
+  display: ${(p) => p.currentUser && p.signedIn ? "flex" : "none"};
 `;

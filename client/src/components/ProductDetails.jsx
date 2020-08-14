@@ -5,10 +5,13 @@ import { starFull } from "react-icons-kit/icomoon/starFull";
 import { starHalf } from "react-icons-kit/icomoon/starHalf";
 import styled, { css } from "styled-components";
 
+import { useShopContext } from "../context/ShopContext";
+import { addItemToCart } from "../context/actions";
 import ComparePrice from "./ComparePrice";
 import { checkAvailability } from "./Product";
 
 export default () => {
+  const { dispatch } = useShopContext();
   const [item, setItem] = useState(null);
   const { productId } = useParams();
 
@@ -53,7 +56,9 @@ export default () => {
 
           <AddToCart>
             <>{ComparePrice("ARK", item.price, 1)}</>
-            <AddToCartBtn>Add to Cart</AddToCartBtn>
+            <AddToCartBtn onClick={() => dispatch(addItemToCart(item.id))}>
+              Add to Cart
+            </AddToCartBtn>
             <Availability
               available={checkAvailability(item.numInStock).available}
             >

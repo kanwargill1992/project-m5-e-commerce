@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Filter from "./Filter";
 
 import { useShopContext } from "../context/ShopContext";
 import Product from "./Product";
@@ -22,6 +23,8 @@ export default ({ filteredIds }) => {
 const ProductsDiv = styled.div`
   display: grid;
   grid: auto / 1fr;
+  /* grid-template-columns: 1fr;
+  grid-template-rows: 50px auto; */
   gap: 50px 30px;
   padding: 30px;
   margin: 30px;
