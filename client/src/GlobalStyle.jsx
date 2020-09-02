@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   h2, h3 {
-    font-family: font-family: 'Quattrocento Sans', sans-serif;
+    font-family: 'Quattrocento Sans', sans-serif;
   }
 
   a {
